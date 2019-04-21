@@ -13,6 +13,15 @@ function doPost(e) {
   } 
   
   if　(postData.type == 'event_callback'){
+    // 複数回叩かれる対策
+    var cache = CacheService.getScriptCache();
+    var cacheKey = postData.event.ts; // タイムスタンプをキーに
+    var cached = cache.get(cacheKey); // {cacheKey:}
+    if (cached != null) {
+      return;
+    }
+    cache.put(cacheKey, true, 600); // {cacheKey:true} 10min保持
+
     var obj = toObj(postData.event.text);
     var res = getConnpass(obj);
     var msgs = createMessage(res);
