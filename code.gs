@@ -1,7 +1,6 @@
 // Incoming WebhooksのURL
 var INCOMING_URL = '';
 var BOT_ID = '';
-var CHANNEL_ID = '';
 
 var CONNPASS_URL = 'https://connpass.com/api/v1/event/';
 
@@ -14,20 +13,15 @@ function doPost(e) {
   } 
   
   if　(postData.type == 'event_callback'){
-    if ( postData.event.channel == CHANNEL_ID // 指定のチャンネルだけを観測する
-    //  && postData.authed_users[0] != BOT_ID // botが発言者の場合には反応しない
-      && postData.event.text.indexOf(BOT_ID) != -1 // botが呼ばれた時だけ反応する
-    ){
-      var obj = toObj(postData.event.text);
-      var res = getConnpass(obj);
-      var msgs = createMessage(res);
-      msgs.forEach(function(msg){
-        reply(msg);
-      });
-      return;
-    }
+    var obj = toObj(postData.event.text);
+    var res = getConnpass(obj);
+    var msgs = createMessage(res);
+    msgs.forEach(function(msg){
+      reply(msg);
+    });
+    return;
   }
-  return reply('sss');
+  return;
 }
 
 // テキストをキーワードと開催日に分けたオブジェクトにして返す
